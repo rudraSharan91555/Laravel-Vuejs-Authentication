@@ -13,7 +13,7 @@
     </div>
 </template>
 
-<!-- <script>
+<script>
 import axios from 'axios';
 
 export default {
@@ -40,4 +40,4 @@ export default {
         }
     }
 };
-</script> -->
+</script>

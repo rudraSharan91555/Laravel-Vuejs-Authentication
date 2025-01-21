@@ -59,8 +59,13 @@ export default{
                 // using dispatch authentication
 
                 const status = true;
+                const token = response.data.token
 
+                // console.log(response.data.token) to check token 
+
+                this.store.dispatch('setAuthToken',token)
                 this.$store.dispatch('checkUserAuthenticationStatus',status);
+                
 
                 this.$router.push("/dashboard");
                 
@@ -71,6 +76,8 @@ export default{
                 }
                 
             }).catch(error =>{
+
+                console.log(error)
                 
                 if(error.response.status == 422){
                     this.errors = Object.values(error.response.data.errors).flat()

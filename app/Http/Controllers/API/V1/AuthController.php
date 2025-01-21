@@ -9,6 +9,7 @@ use Illuminate\Support\Facades\Hash;
 use Illuminate\Auth\Events\Registered;
 use Illuminate\Http\Request;
 use App\Models\User;
+use Illuminate\Validation\ValidationException;
 
 class AuthController extends Controller
 {
@@ -40,7 +41,26 @@ class AuthController extends Controller
 
     public function login(LoginRequest $request)
     {
-        return $request->all();
+        
+    $user = User::where('email', $request->email)->first();
+ 
+    if (! $user || ! Hash::check($request->password, $user->password)) {
+
+        return response()->json([
+            'errors' => 'The provided credential are incorrect'
+        ],401);
+
+        // throw ValidationException::withMessages([
+        //     'email' => ['The provided credentials are incorrect.'],
+        // ]);
+    }
+ 
+    $token = $user->createToken('auth_token')->plainTextToken;
+
+        return response()->json([
+            'token' => $token
+        ],201);
+
     }
 
     public function checkUserStatus(){
