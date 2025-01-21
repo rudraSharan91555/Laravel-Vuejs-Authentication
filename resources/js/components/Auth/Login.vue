@@ -7,20 +7,21 @@
                         Login
                     </div>
                     <div class="card-body">
-                    <ul v-for="error in errors">
-                        <div class="alert alert-danger" role="alert">
-                            {{ error }}
-                        </div>
-                    </ul>
-                        <form @submit.prevent="login" >
+                        <ul v-for="error in errors">
+                            <div class="alert alert-danger" role="alert">
+                                {{ error }}
+                            </div>
+                        </ul>
+                        <form @submit.prevent="login">
                             <div class="mb-3">
                                 <label for="exampleInputEmail1" class="form-label">Email address</label>
                                 <input type="email" v-model="email" class="form-control" id="exampleInputEmail1"
-                                    aria-describedby="emailHelp" placeholder="Enter your email">                                
+                                    aria-describedby="emailHelp" placeholder="Enter your email">
                             </div>
                             <div class="mb-3">
                                 <label for="exampleInputPassword1" class="form-label">Password</label>
-                                <input type="password" v-model="password" class="form-control" id="exampleInputPassword1" placeholder="Enter your password">
+                                <input type="password" v-model="password" class="form-control"
+                                    id="exampleInputPassword1" placeholder="Enter your password">
                             </div>
                             <button type="submit" class="btn btn-primary">Login</button>
                         </form>
@@ -34,65 +35,68 @@
 <script>
 import axios from 'axios';
 
-export default{
+export default {
 
-    data(){
-        return{
-            email:'',
-            password:'',
-            errors:[]
+    data() {
+        return {
+            email: '',
+            password: '',
+            errors: []
         }
     },
-    methods:{
-        login(){
+    methods: {
+        login() {
 
             this.clearMessage();
 
             //api use here for login
             axios.get('/sanctum/csrf-cookie').then(response => {
 
-            axios.post('api/login',{
-                email: this.email,
-                password: this.password
-            }).then( response =>{
+                axios.post('api/login', {
+                    email: this.email,
+                    password: this.password
+                }).then(response => {
 
-                // using dispatch authentication
+                    // using dispatch authentication
 
-                const status = true;
-                const token = response.data.token
+                    const status = true;
+                    const token = response.data.token
 
-                // console.log(response.data.token) to check token 
+                    // console.log(response.data.token) to check token 
 
-                this.store.dispatch('setAuthToken',token)
-                this.$store.dispatch('checkUserAuthenticationStatus',status);
-                
+                    // this.store.dispatch('setAuthToken',token)
+                    // this.$store.dispatch('checkUserAuthenticationStatus',status);
+                    // this.$store.dispatch('setAuthToken', token);
+                    this.$store.dispatch('setAuthToken', token);
 
-                this.$router.push("/dashboard");
-                
+                    this.$store.dispatch('checkUserAuthenticationStatus', status);
 
-                if(response.status == 201){
-                    // response.data.message;
-                    console.log(response.data.message)
-                }
-                
-            }).catch(error =>{
+                    this.$router.push("/dashboard");
 
-                console.log(error)
-                
-                if(error.response.status == 422){
-                    this.errors = Object.values(error.response.data.errors).flat()
-                }
-                else{
-                    this.errors = ['Something went wrong']
-                }
 
+                    if (response.status == 201) {
+                        // response.data.message;
+                        console.log(response.data.message)
+                    }
+
+                }).catch(error => {
+
+                    console.log(error)
+
+                    if (error.response.status == 422) {
+                        this.errors = Object.values(error.response.data.errors).flat()
+                    }
+                    else {
+                        this.errors = ['Something went wrong']
+                    }
+
+                });
             });
-        });
         },
 
-        clearMessage(){
-            this.errors='';
+        clearMessage() {
+            this.errors = '';
         }
     }
 }
-</script> 
+</script>
