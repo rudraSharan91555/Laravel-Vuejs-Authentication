@@ -63,13 +63,9 @@ export default {
                     const token = response.data.token
 
                     // console.log(response.data.token) to check token 
-
-                    // this.store.dispatch('setAuthToken',token)
-                    // this.$store.dispatch('checkUserAuthenticationStatus',status);
-                    // this.$store.dispatch('setAuthToken', token);
                     this.$store.dispatch('setAuthToken', token);
 
-                    this.$store.dispatch('checkUserAuthenticationStatus', status);
+                    this.$store.dispatch('SetAuthStatus', status);
 
                     this.$router.push("/dashboard");
 

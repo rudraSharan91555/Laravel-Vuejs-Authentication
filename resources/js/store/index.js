@@ -8,9 +8,17 @@ export default createStore({
     },
 
     mutations: {
-        UpdateAuthenticationStatus(state, status) {
+
+        // UpdateAuthenticationStatus(state, status) {
+        //     state.isAuthenticated = status;
+        // },
+
+        UpdateAuthStatus(state, status){
             state.isAuthenticated = status;
+
+            // console.log('status is'+ status)
         },
+
         UpdateToken(state, token) {
             state.token = token;
             localStorage.setItem('token', token);
@@ -18,14 +26,19 @@ export default createStore({
     },
 
     actions: {
-        checkUserAuthenticationStatus({ commit }) {
-            axios.get('api/authenticated')
-                .then((response) => {
-                    commit('UpdateAuthenticationStatus', response.data.status);
-                })
-                .catch((error) => {
-                    console.error(error);
-                });
+
+        // checkUserAuthenticationStatus({ commit }) {
+        //     axios.get('api/authenticated')
+        //         .then((response) => {
+        //             commit('UpdateAuthenticationStatus', response.data.status);
+        //         })
+        //         .catch((error) => {
+        //             console.error(error);
+        //         });
+        // },
+
+        SetAuthStatus({ commit }, status) {
+            commit('UpdateAuthStatus', status)            
         },
 
         setAuthToken({ commit }, token) {
@@ -34,5 +47,7 @@ export default createStore({
         },
     },
 
-    getters: {},
+    getters: {
+        authStatus: state => state.isAuthenticated
+    },
 });

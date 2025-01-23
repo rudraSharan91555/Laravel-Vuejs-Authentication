@@ -15,9 +15,10 @@
                         </li>
                     </ul>
                     <form class="d-flex mt-1 " role="search">
-                        <router-link to="/dashboard" class="btn btn-outline-success">Dashboard</router-link> &nbsp; &nbsp;
-                        <router-link to="/login" class="btn btn-outline-primary">Login</router-link> &nbsp; &nbsp;
-                        <router-link to="/register" class="btn btn-outline-primary">Register</router-link>
+                        <router-link v-if="isAuthenticated" to="/dashboard" class="btn btn-outline-success">Dashboard</router-link> &nbsp;
+                        &nbsp;
+                        <router-link v-if="!isAuthenticated" to="/login" class="btn btn-outline-primary">Login</router-link> &nbsp; &nbsp;
+                        <router-link v-if="!isAuthenticated" to="/register" class="btn btn-outline-primary">Register</router-link>
                     </form>
                 </div>
             </div>
@@ -26,3 +27,23 @@
 
     <router-view></router-view>
 </template>
+
+<script>
+import { mapGetters } from 'vuex';
+
+export default {
+
+    computed:{
+
+        // isAuthenticated(){
+            // return this.$store.state.isAuthenticated
+            // return this.$store.getters.authStatus
+        // }
+
+        ...mapGetters({
+            isAuthenticated: 'authStatus' 
+        })
+    }
+
+}
+</script>
